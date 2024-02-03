@@ -1,5 +1,5 @@
 import SwiftUI
-
+import Speech
 struct ContentView: View {
     @State private var reflections: [Reflection] = UserDefaultsManager.loadReflections()
     @State private var questions = ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"]
@@ -20,29 +20,59 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 Form {
-                    Section(header: Text("Enter Reflection")) {
+                    Section(header: Text("Reflection of Your Day").font(.headline).foregroundColor(.orange)) {
                         TextField("Heading", text: $heading)
+                            .padding()
+                            .background(Color(UIColor.systemGray6))
+                            .cornerRadius(8.0)
+                        
                         ForEach(0..<5, id: \.self) { index in
-                            TextField(questions[index], text: $answers[index])
+                            VStack(alignment: .leading) {
+                                Text(questions[index])
+                                    .font(.headline)
+                                    .foregroundColor(.blue)
+                                    .padding(.vertical, 5)
+                                
+                                MultilineTextView(text: $answers[index], placeholder: "")
+                                    .frame(height: 100)
+                                    .background(Color(UIColor.systemGray6))
+                                    .cornerRadius(8.0)
+                            }
                         }
                     }
                 }
+                .padding(1)
                 
                 Button("Submit") {
                     saveReflection()
                 }
                 .padding()
+                .foregroundColor(.white)
+                .background(allQuestionsAnswered ? Color.blue : Color.gray)
+                .cornerRadius(25.0)
+                .padding(1)
                 .disabled(!allQuestionsAnswered) // Disable the button if not all questions are answered
                 
                 if isSaved {
                     NavigationLink(destination: SavedReflectionsView(reflections: $reflections)) {
                         Text("View Saved Reflections")
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(25.0)
                     }
+                    .padding(1)
                 }
                 
-                Spacer()
+                
             }
-            .navigationTitle("Reflection App")
+            .background(
+                Image("background")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .edgesIgnoringSafeArea(.all)
+            )
+            .navigationTitle("Daily Reflections")
         }
     }
     
@@ -61,5 +91,49 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct MultilineTextView: UIViewRepresentable {
+    @Binding var text: String
+    var placeholder: String
+    
+    func makeUIView(context: Context) -> UITextView {
+        let textView = UITextView()
+        textView.delegate = context.coordinator
+        textView.font = UIFont.preferredFont(forTextStyle: .body)
+        textView.isScrollEnabled = true
+        textView.isEditable = true
+        textView.isUserInteractionEnabled = true
+        textView.text = placeholder
+        textView.backgroundColor = UIColor.systemGray6 // Set background color to gray
+        textView.textColor = UIColor.lightGray
+        return textView
+    }
+    
+    func updateUIView(_ uiView: UITextView, context: Context) {
+        if text.isEmpty {
+            uiView.text = placeholder
+            uiView.textColor = UIColor.lightGray
+        } else {
+            uiView.text = text
+            uiView.textColor = UIColor.label
+        }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
+    
+    class Coordinator: NSObject, UITextViewDelegate {
+        var parent: MultilineTextView
+        
+        init(parent: MultilineTextView) {
+            self.parent = parent
+        }
+        
+        func textViewDidChange(_ textView: UITextView) {
+            self.parent.text = textView.text
+        }
     }
 }
