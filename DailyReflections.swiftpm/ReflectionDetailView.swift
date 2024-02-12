@@ -1,25 +1,27 @@
 import SwiftUI
+
 struct ReflectionDetailView: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var reflections: [Reflection]
     var reflection: Reflection
+    let questions = ["What was one challenging situation or problem you encountered today?",
+                     "Could you overcome the challenge? If yes, how did you manage it? If no, what do you think might be the reason?",
+                     "What was the most valuable advice or opinion someone shared with you today?"]
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Reflection Details")
-                .font(.title)
-                .padding()
             
-            Text("Heading: \(reflection.heading)")
-                .padding(.horizontal)
+            
             
             ForEach(0..<reflection.answers.count, id: \.self) { index in
                 VStack(alignment: .leading) {
-                    Text("Question \(index + 1)")
+                    Text(questions[index]) // Display the question from the array
                         .font(.headline)
-                        .padding(.horizontal)
+                        .bold() // Make the question bold
+                        .padding()
+                    
                     Text(reflection.answers[index])
-                        .padding(.horizontal)
+                        .padding(.horizontal).foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                 }
             }
             

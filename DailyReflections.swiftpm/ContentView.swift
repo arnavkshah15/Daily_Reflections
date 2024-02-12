@@ -1,10 +1,12 @@
 import SwiftUI
-import Speech
+
 struct ContentView: View {
     @State private var reflections: [Reflection] = UserDefaultsManager.loadReflections()
-    @State private var questions = ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"]
-    @State private var answers = Array(repeating: "", count: 5)
-    @State private var heading = ""
+    @State private var questions = ["What was one challenging situation or problem you encountered today?",
+                                    "Could you overcome the challenge? If yes, how did you manage it? If no, what do you think might be the reason?",
+                                    "What was the most valuable advice or opinion someone shared with you today?"]
+    @State private var answers = Array(repeating: "", count: 3)
+    @State private var selectedRatings = [""]
     @State private var isSaved = true // Set initially to true
     
     var allQuestionsAnswered: Bool {
@@ -20,13 +22,20 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 Form {
-                    Section(header: Text("Reflection of Your Day").font(.headline).foregroundColor(.orange)) {
-                        TextField("Heading", text: $heading)
-                            .padding()
-                            .background(Color(UIColor.systemGray6))
-                            .cornerRadius(8.0)
+                    Section() {
+                        Text("How was your day?")
+                            .font(.headline).foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                                    
+                        Picker("Rating", selection: $selectedRatings[0]) {
+                            Text("😞").tag("😞").font(.title)
+                            Text("😐").tag("😐")
+                            Text("🙂").tag("🙂")
+                            Text("😊").tag("😊")
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .padding()
                         
-                        ForEach(0..<5, id: \.self) { index in
+                        ForEach(0..<3, id: \.self) { index in
                             VStack(alignment: .leading) {
                                 Text(questions[index])
                                     .font(.headline)
@@ -64,7 +73,6 @@ struct ContentView: View {
                     .padding(1)
                 }
                 
-                
             }
             .background(
                 Image("background")
@@ -77,10 +85,10 @@ struct ContentView: View {
     }
     
     func saveReflection() {
-        let reflection = Reflection(date: Date(), heading: heading, answers: answers)
+        let reflection = Reflection(date: Date(), heading: selectedRatings[0], answers: answers)
         reflections.append(reflection)
-        heading = ""
-        answers = Array(repeating: "", count: 5)
+        selectedRatings = [""]
+        answers = Array(repeating: "", count: 3)
         isSaved = true // Update isSaved to true
         
         // Save reflections to UserDefaults
