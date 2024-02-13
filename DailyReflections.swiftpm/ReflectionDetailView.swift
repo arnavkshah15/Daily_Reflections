@@ -16,12 +16,12 @@ struct ReflectionDetailView: View {
             ForEach(0..<reflection.answers.count, id: \.self) { index in
                 VStack(alignment: .leading) {
                     Text(questions[index]) // Display the question from the array
-                        .font(.headline)
+                        .font(.title3)
                         .bold() // Make the question bold
                         .padding()
                     
                     Text(reflection.answers[index])
-                        .padding(.horizontal).foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                        .padding(.horizontal).foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/).font(.headline)
                 }
             }
             

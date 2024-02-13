@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct ContentView: View {
     @State private var reflections: [Reflection] = UserDefaultsManager.loadReflections()
@@ -7,7 +8,7 @@ struct ContentView: View {
                                     "What was the most valuable advice or opinion someone shared with you today?"]
     @State private var answers = Array(repeating: "", count: 3)
     @State private var selectedRatings = [""]
-    @State private var isSaved = true // Set initially to true
+    @State private var isSaved = true
     
     var allQuestionsAnswered: Bool {
         for answer in answers {
@@ -20,68 +21,80 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
+           
+
             VStack {
-                Form {
-                    Section() {
+                HStack{
+                    Text("Daily Reflections")
+                        .font(.largeTitle)
+                        .padding(.bottom, 20)
+                        .foregroundColor(.black)
+                        .bold()
+                    Spacer()
+                }
+                ScrollView{Section() {
+                    HStack{
                         Text("How was your day?")
-                            .font(.headline).foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                                    
-                        Picker("Rating", selection: $selectedRatings[0]) {
-                            Text("😞").tag("😞").font(.title)
-                            Text("😐").tag("😐")
-                            Text("🙂").tag("🙂")
-                            Text("😊").tag("😊")
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .padding()
-                        
-                        ForEach(0..<3, id: \.self) { index in
-                            VStack(alignment: .leading) {
-                                Text(questions[index])
-                                    .font(.headline)
-                                    .foregroundColor(.blue)
-                                    .padding(.vertical, 5)
-                                
-                                MultilineTextView(text: $answers[index], placeholder: "")
-                                    .frame(height: 100)
-                                    .background(Color(UIColor.systemGray6))
-                                    .cornerRadius(8.0)
-                            }
+                            .font(.headline).foregroundColor(.black)
+                        Spacer()
+                    }
+                    
+                    Picker("Rating", selection: $selectedRatings[0]) {
+                        Text("😞").tag("😞").font(.title)
+                        Text("😐").tag("😐")
+                        Text("🙂").tag("🙂")
+                        Text("😊").tag("😊")
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .background(Color(UIColor.systemGray4))
+                    .cornerRadius(10)
+                    .padding()
+                    
+                    ForEach(0..<3, id: \.self) { index in
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(questions[index])
+                                .font(.headline)
+                                .foregroundColor(.black)
+                                .multilineTextAlignment(.leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                            
+                            
+                            MultilineTextView(text: $answers[index], placeholder: "")
+                                .frame(height: 100)
+                                .background(Color(UIColor.systemGray2))
+                                .cornerRadius(10.0)
                         }
                     }
                 }
-                .padding(1)
+                }
                 
                 Button("Submit") {
                     saveReflection()
                 }
                 .padding()
                 .foregroundColor(.white)
-                .background(allQuestionsAnswered ? Color.blue : Color.gray)
+                .background(allQuestionsAnswered && !selectedRatings[0].isEmpty ? Color.green : Color.gray)
                 .cornerRadius(25.0)
                 .padding(1)
-                .disabled(!allQuestionsAnswered) // Disable the button if not all questions are answered
+                .disabled(!(allQuestionsAnswered && !selectedRatings[0].isEmpty))
                 
                 if isSaved {
                     NavigationLink(destination: SavedReflectionsView(reflections: $reflections)) {
                         Text("View Saved Reflections")
-                            .foregroundColor(.white)
+                            .foregroundColor(.green)
                             .padding()
-                            .background(Color.blue)
+                            .background(Color(UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0)))
                             .cornerRadius(25.0)
                     }
-                    .padding(1)
+                    
                 }
                 
-            }
-            .background(
-                Image("background")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .edgesIgnoringSafeArea(.all)
-            )
-            .navigationTitle("Daily Reflections")
-        }
+            }.padding(10)
+                
+                
+                
+                .background(Color(UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0)))
+        }.background(Color.white)
     }
     
     func saveReflection() {
@@ -89,9 +102,8 @@ struct ContentView: View {
         reflections.append(reflection)
         selectedRatings = [""]
         answers = Array(repeating: "", count: 3)
-        isSaved = true // Update isSaved to true
+        isSaved = true
         
-        // Save reflections to UserDefaults
         UserDefaultsManager.saveReflections(reflections)
     }
 }
@@ -114,18 +126,19 @@ struct MultilineTextView: UIViewRepresentable {
         textView.isEditable = true
         textView.isUserInteractionEnabled = true
         textView.text = placeholder
-        textView.backgroundColor = UIColor.systemGray6 // Set background color to gray
-        textView.textColor = UIColor.lightGray
+        textView.backgroundColor = UIColor.systemGray4
+        textView.textColor = UIColor.white
+        textView.tintColor = UIColor.black
         return textView
     }
     
     func updateUIView(_ uiView: UITextView, context: Context) {
         if text.isEmpty {
             uiView.text = placeholder
-            uiView.textColor = UIColor.lightGray
+            uiView.textColor = UIColor.white
         } else {
             uiView.text = text
-            uiView.textColor = UIColor.label
+            uiView.textColor = UIColor.black
         }
     }
     
