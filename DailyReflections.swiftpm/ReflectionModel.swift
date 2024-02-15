@@ -12,7 +12,7 @@ struct Reflection: Identifiable, Codable {
         self.date = date
         self.heading = heading
         self.answers = answers
-        self.predictedLabel = predictedLabel // Initialize the predicted label
+        self.predictedLabel = predictedLabel 
     }
 }
 

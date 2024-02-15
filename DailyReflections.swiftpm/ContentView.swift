@@ -78,7 +78,7 @@ struct ContentView: View {
                 .disabled(!(allQuestionsAnswered && !selectedRatings[0].isEmpty))
 
                 if isSaved {
-                    NavigationLink(destination: SavedReflectionsView(reflections: $reflections)) { // Pass sentiment raw value to the destination view
+                    NavigationLink(destination: SavedReflectionsView(reflections: $reflections)) { 
                         Text("View Saved Reflections")
                             .foregroundColor(.green)
                             .padding()
@@ -105,30 +105,30 @@ struct ContentView: View {
 
         UserDefaultsManager.saveReflections(reflections)
 
-        // Perform sentiment analysis on answers
+        
         do {
-            // Instantiate the Qualities model
+            
             let qualitiesModel = Qualities()
 
-            // Prepare the input text for the model
-            let inputText = answers[1] // Assuming you want to analyze the second answer
+            
+            let inputText = answers[0]+" "+answers[1]+" "+answers[2]
             let qualitiesInput = QualitiesInput(text: inputText)
 
-            // Make predictions using the Qualities model
+            
             let prediction = try qualitiesModel.prediction(input: qualitiesInput)
 
             // Retrieve the predicted label
             let predictedLabel = prediction.label
 
-            // Save the predicted label or relevant information into your Reflection object
-            reflection.predictedLabel = predictedLabel // Assuming your Reflection object has a property for storing the predicted label
+            
+            reflection.predictedLabel = predictedLabel 
 
-            // Update the reflections array with the updated reflection
+            
             if let index = reflections.firstIndex(where: { $0.date == reflection.date }) {
                 reflections[index] = reflection
             }
 
-            // Save the reflections array
+           
             UserDefaultsManager.saveReflections(reflections)
         } catch {
             print("Error performing sentiment analysis: \(error)")

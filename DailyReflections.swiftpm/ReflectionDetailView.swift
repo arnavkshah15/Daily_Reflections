@@ -13,14 +13,15 @@ struct ReflectionDetailView: View {
             
             
             if let predictedLabel = reflection.predictedLabel {
-                            Text("Predicted Label: \(predictedLabel)")
+                Text("Strengths:").font(.title3)
                                 .padding()
+                Text(predictedLabel).foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/).font(.headline).padding()
                         }
             ForEach(0..<reflection.answers.count, id: \.self) { index in
                 VStack(alignment: .leading) {
-                    Text(questions[index]) // Display the question from the array
+                    Text(questions[index]) 
                         .font(.title3)
-                        .bold() // Make the question bold
+                        .bold() 
                         .padding()
                     
                     Text(reflection.answers[index])
@@ -43,7 +44,7 @@ struct ReflectionDetailView: View {
         if let index = reflections.firstIndex(where: { $0.id == reflection.id }) {
             reflections.remove(at: index)
             UserDefaultsManager.saveReflections(reflections)
-            presentationMode.wrappedValue.dismiss() // Dismiss the current view to go back
+            presentationMode.wrappedValue.dismiss() 
         }
     }
 }
