@@ -1,18 +1,21 @@
 import SwiftUI
-
+import CoreML
 struct Reflection: Identifiable, Codable {
     var id: UUID
     let date: Date
     let heading: String
     let answers: [String]
+    var predictedLabel: String? // Add a property to store the predicted label
     
-    init(date: Date, heading: String, answers: [String]) {
-        self.id = UUID()
+    init(id: UUID = UUID(), date: Date, heading: String, answers: [String], predictedLabel: String? = nil) {
+        self.id = id
         self.date = date
         self.heading = heading
         self.answers = answers
+        self.predictedLabel = predictedLabel // Initialize the predicted label
     }
 }
+
 class UserDefaultsManager {
     private static let key = "Reflections"
     

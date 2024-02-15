@@ -12,7 +12,10 @@ struct ReflectionDetailView: View {
         VStack(alignment: .leading) {
             
             
-            
+            if let predictedLabel = reflection.predictedLabel {
+                            Text("Predicted Label: \(predictedLabel)")
+                                .padding()
+                        }
             ForEach(0..<reflection.answers.count, id: \.self) { index in
                 VStack(alignment: .leading) {
                     Text(questions[index]) // Display the question from the array
