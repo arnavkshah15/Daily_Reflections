@@ -45,7 +45,7 @@ struct ContentView: View {
                             Text("😊").tag("😊")
                         }
                         .pickerStyle(SegmentedPickerStyle())
-                        .background(Color(UIColor.systemGray4))
+                        .background(Color(UIColor.systemGray))
                         .cornerRadius(10)
                         .padding()
 
@@ -160,7 +160,7 @@ struct MultilineTextView: UIViewRepresentable {
         textView.isEditable = true
         textView.isUserInteractionEnabled = true
         textView.text = placeholder
-        textView.backgroundColor = UIColor.systemGray4
+        textView.backgroundColor = UIColor.systemGray
         textView.textColor = UIColor.white
         textView.tintColor = UIColor.black
         return textView
