@@ -15,7 +15,51 @@ struct ReflectionDetailView: View {
             if let predictedLabel = reflection.predictedLabel {
                 Text("Strengths:").font(.title3)
                                 .padding()
-                Text(predictedLabel).foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/).font(.headline).padding()
+                if(predictedLabel=="3"){
+                    Text("Resilience\nEmpathy\nSelf-awareness").foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/).font(.headline).padding()
+                    Text("Weaknesses:").font(.title3)
+                                    .padding()
+                    Text("Emotional vulnerability\nDecreased motivation\nNegative self-perception").foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/).font(.headline).padding()
+                }
+                else if(predictedLabel=="0"){
+                    Text("Compassion\nPerseverance\nAdaptability").foregroundColor(.blue).font(.headline).padding()
+                               
+                               Text("Weaknesses:").font(.title3)
+                                   .padding()
+                               Text("Increased sensitivity\nDifficulty trusting\nSelf-doubt").foregroundColor(.blue).font(.headline).padding()
+                }
+                else if(predictedLabel=="1"){
+                    Text("Optimism\nResilience\nEnergy").foregroundColor(.blue).font(.headline).padding()
+                                
+                                Text("Weaknesses:").font(.title3)
+                                    .padding()
+                                Text("Overlooking risks\nIgnoring negative aspects\nTaking things for granted").foregroundColor(.blue).font(.headline).padding()
+                }
+                else if(predictedLabel=="4"){
+                    Text("Alertness\nSurvival Instincts\nIncreased Awareness").foregroundColor(.blue).font(.headline).padding()
+                               
+                               Text("Weaknesses:").font(.title3)
+                                   .padding()
+                               Text("Paranoia\nOverreaction\nImpaired Judgment").foregroundColor(.blue).font(.headline).padding()
+                }
+                else if(predictedLabel=="5"){
+                    Text("Assertiveness\nEnergy\nMotivation for Change").foregroundColor(.blue).font(.headline).padding()
+                                
+                                Text("Weaknesses:").font(.title3)
+                                    .padding()
+                                Text("Impulsiveness\nAggression\nDifficulty in Communication").foregroundColor(.blue).font(.headline).padding()
+                }
+                else{
+                    Text("Kindness\nEmpathy\nAffectionate").foregroundColor(.blue).font(.headline).padding()
+                                
+                                Text("Weaknesses:").font(.title3)
+                                    .padding()
+                                Text("Overly trusting\nDifficulty saying no\nVulnerability to manipulation").foregroundColor(.blue).font(.headline).padding()
+                }
+                
+                
+                
+                
                         }
             ForEach(0..<reflection.answers.count, id: \.self) { index in
                 VStack(alignment: .leading) {
